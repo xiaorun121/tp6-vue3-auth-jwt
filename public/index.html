@@ -1,0 +1,91 @@
+<div class="site-tips">
+    <div class="container_1200">
+        <div class="text">
+            We use cookies to allow our website to function properly, personalize content and advertisements, provide
+            social media features, and analyze traffic. We also share information about your use of our website with
+            social media, advertising, and analytics partners.
+        </div>
+        <div class="btn_box">
+            <div class="btn btn1">Reject All</div>
+            <div class="btn btn2">Accept All Cookies</div>
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        if ($.cookie("lxtx_sitetips_cookie") != '1') {
+            $('.site-tips').show();
+        }
+    });
+
+    $('.btn1').on('click', function () {
+        $('.site-tips').hide();
+        var cookies = document.cookie.split(";");
+
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            console.log(cookie)
+            var eqPos = cookie.indexOf("=");
+            console.log(eqPos)
+            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+
+            console.log(name)
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        }
+    });
+    $('.btn2').on('click', function () {
+        $('.site-tips').hide();
+        $(function () {
+            $.cookie('lxtx_sitetips_cookie', '1', { expires: 1 });
+        });
+    });
+</script>
+<style>
+    /* lxtx-tips */
+    .site-tips,
+    .site-notice {
+        position: fixed;
+        z-index: 999;
+        display: none;
+        bottom: 10px;
+        right: 0;
+        height: auto;
+        background: #e9e9e9;
+        color: #111;
+        border-radius: 3px 0 0 0;
+        padding: 25px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .site-tips .text {
+        line-height: 26px;
+    }
+
+    .site-tips .btn_box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .site-tips .btn_box .btn {
+        border-radius: 20px;
+        width: 160px;
+        height: 38px;
+        margin: 0 10px;
+        color: #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 30px;
+        cursor: pointer;
+        border: 1px solid #111;
+    }
+
+    .site-tips .btn_box .btn:hover {
+        background: #999;
+    }
+</style>
