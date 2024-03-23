@@ -160,12 +160,12 @@ export default {
     },
     created() {
         // 获取是否是管理员权限
-        const isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
+        let isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
         this.ISAdmin = isAdmin;
 
         if (isAdmin == true) {
 
-            const authGroup = sessionStorage.getItem('authGroup');
+            let authGroup = sessionStorage.getItem('authGroup');
 
             if (authGroup) {
                 this.data = JSON.parse(authGroup)
@@ -174,11 +174,11 @@ export default {
             }
         } else {
             // 获取当前路由的参数menu_id 
-            const menu_id = this.$router.currentRoute._value.query.menu_id;
+            let menu_id = this.$router.currentRoute._value.query.menu_id;
             this.checkAuth(menu_id);
 
             // 判断是否有当前用户的规则数据  rules
-            const rules = sessionStorage.getItem('rules');
+            let rules = sessionStorage.getItem('rules');
             if (rules) {
                 this.rules = rules;
             } else {
@@ -196,7 +196,7 @@ export default {
                 return true;
             } else {
                 // 将 rules 字符串按逗号分隔为数组
-                const rulesArray = rules.split(',').map(item => parseInt(item.trim()));
+                let rulesArray = rules.split(',').map(item => parseInt(item.trim()));
 
                 // 检查 menu_id 是否包含在 rulesArray 中
                 return rulesArray.includes(parseInt(menu_id));
@@ -204,8 +204,8 @@ export default {
         },
         // 获取用户的规则数据rules
         async getUserToRules() {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             await that.$api.Admin.getUserToRules({ user_id: user_id }).then(function (response) {
                 if (response.data.code == 200) {
                     that.rules = response.data.data;
@@ -218,8 +218,8 @@ export default {
 
         // 查询当前窗口是否有权限
         async checkAuth(menu_id) {
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
             await that.$api.Admin.checkAuth({ id: menu_id, user_id: userId }).then(function (response) {
                 if (response.data.code == 200) {
                     that.haveRule = true;
@@ -270,7 +270,7 @@ export default {
         },
         // 查询数据
         async getAuthGroup() {
-            const that = this;
+            let that = this;
             await that.$api.AuthGroup.index().then(function (response) {
                 if (response.data.code == 200) {
 
@@ -292,8 +292,8 @@ export default {
 
             return new Promise((resolve) => {
                 // 判断是否有权限
-                const that = this;
-                const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+                let that = this;
+                let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                         if (response.data.code == 0) {
@@ -319,8 +319,8 @@ export default {
         },
         // 保存改变角色状态
         async changeSwitch(id, is_status){
-            const status = (is_status === true ? false : true);
-            const that = this;
+            let status = (is_status === true ? false : true);
+            let that = this;
 
             await that.$api.AuthGroup.update(id, { status: status }).then(function (response) {
 
@@ -343,9 +343,9 @@ export default {
         },
         // add
         async addAuthGroup(menu_auth_id) {
-            const that = this;
+            let that = this;
 
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -354,7 +354,7 @@ export default {
                         that.modalAddAuthGroup = true;
                         that.formValidateID = 0;
 
-                        const menuList = sessionStorage.getItem('menuList');
+                        let menuList = sessionStorage.getItem('menuList');
 
                         if (menuList) {
                             that.menuList = JSON.parse(menuList);
@@ -369,7 +369,7 @@ export default {
                 that.modalAddAuthGroup = true;
                 that.formValidateID = 0;
 
-                const menuList = sessionStorage.getItem('menuList');
+                let menuList = sessionStorage.getItem('menuList');
 
                 if (menuList) {
                     that.menuList = JSON.parse(menuList);
@@ -381,7 +381,7 @@ export default {
         async editAuthGroup(id, menu_auth_id) {
 
             var that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -401,7 +401,7 @@ export default {
         },
         // readAuthGroup
         async readAuthGroup(id){
-            const that = this;
+            let that = this;
             that.$Message.loading('拼命加载中...');
             setTimeout(() => {
                 that.modalAddAuthGroup = true;
@@ -433,7 +433,7 @@ export default {
         async clickDelAuthGroup(id, menu_auth_id) {
 
             var that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -453,7 +453,7 @@ export default {
         },
         // del
         delAuthGroup(id) {
-            const that = this;
+            let that = this;
             this.$Modal.confirm({
                 title: 'Del',
                 content: 'Are you sure you want to delete it?',
@@ -478,7 +478,7 @@ export default {
         },
         // 提交数据
         async AsyncSaveAuthGroup(name) {
-            const that = this;
+            let that = this;
             // 验证MenuName
             await this.$refs[name].validate((valid) => {
                 if (valid) {

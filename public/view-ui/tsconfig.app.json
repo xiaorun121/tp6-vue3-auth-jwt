@@ -6,6 +6,8 @@
     "composite": true,
     "noEmit": true,
     "baseUrl": ".",
+    "allowJs": true, // 允许处理 JavaScript 文件
+    "strictNullChecks": false, //关闭严格的空校验
     "paths": {
       "@/*": ["./src/*"]
     }

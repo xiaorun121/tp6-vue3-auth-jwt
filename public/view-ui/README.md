@@ -50,3 +50,19 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+
+
+### 配置nginx  
+### server {
+###    listen 80;
+###    server_name your_domain.com;
+
+###    root /path/to/your/app;  # 指向你 Vue.js 应用的根目录
+
+###    index index.html;
+
+###    location / {
+###        try_files $uri $uri/ /index.html;
+###    }
+### }
+###

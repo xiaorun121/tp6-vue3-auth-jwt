@@ -34,7 +34,7 @@
 <script>
 export default {
     data() {
-        const validateName = (rule, value, callback) => {
+        let validateName = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('The name cannot be empty'));
             } else {
@@ -62,15 +62,15 @@ export default {
     created() {
 
         // 获取是否是管理员权限
-        const isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
+        let isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
         this.ISAdmin = isAdmin;
 
         if (isAdmin == true) {
 
-            const getData = sessionStorage.getItem('getData')
+            let getData = sessionStorage.getItem('getData')
 
             if (getData) {
-                const session_name = JSON.parse(getData).name;
+                let session_name = JSON.parse(getData).name;
                 if (session_name != 'admin') {
                     this.getWebsite();
                 }
@@ -80,11 +80,11 @@ export default {
 
         } else {
             // 获取当前路由的参数menu_id 
-            const menu_id = this.$router.currentRoute._value.query.menu_id;
+            let menu_id = this.$router.currentRoute._value.query.menu_id;
             this.checkAuth(menu_id);
 
             // 判断是否有当前用户的规则数据  rules
-            const rules = sessionStorage.getItem('rules');
+            let rules = sessionStorage.getItem('rules');
             if (rules) {
                 this.rules = rules;
             } else {
@@ -102,7 +102,7 @@ export default {
                 return true;
             } else {
                 // 将 rules 字符串按逗号分隔为数组
-                const rulesArray = rules.split(',').map(item => parseInt(item.trim()));
+                let rulesArray = rules.split(',').map(item => parseInt(item.trim()));
 
                 // 检查 menu_id 是否包含在 rulesArray 中
                 return rulesArray.includes(parseInt(menu_id));
@@ -110,8 +110,8 @@ export default {
         },
         // 获取用户的规则数据rules
         async getUserToRules() {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             await that.$api.Admin.getUserToRules({ user_id: user_id }).then(function (response) {
                 if (response.data.code == 200) {
                     that.rules = response.data.data;
@@ -124,8 +124,8 @@ export default {
 
         // 查询当前窗口是否有权限
         async checkAuth(menu_id) {
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
             await that.$api.Admin.checkAuth({ id: menu_id, user_id: userId }).then(function (response) {
                 if (response.data.code == 200) {
                     that.haveRule = true;
@@ -142,7 +142,7 @@ export default {
         async getWebsite() {
 
             // 查询缓存中是否有website数据
-            const websiteData = JSON.parse(sessionStorage.getItem('website'));
+            let websiteData = JSON.parse(sessionStorage.getItem('website'));
 
             if (websiteData) {
 
@@ -152,7 +152,7 @@ export default {
 
                 sessionStorage.setItem('getData', JSON.stringify({ name: 'admin' }));
 
-                var that = this;
+                let that = this;
 
                 that.$api.Website.getWebsite().then(function (response) {
 
@@ -173,17 +173,9 @@ export default {
         },
         // 提交验证
         handleSubmit(name, menu_auth_id) {
-            var that = this;
+            let that = this;
             that.$refs[name].validate((valid) => {
                 if (valid) {
-                    // 判断是否有当前用户的规则数据  rules
-                    const rules = sessionStorage.getItem('rules');
-                    if (rules) {
-                        this.rules = rules;
-                    } else {
-                        // 获取用户的规则数据
-                        this.getUserToRules();
-                    }
 
                     // 判断是否有按钮权限
                     that.checkIsAuthToButton(menu_auth_id);
@@ -195,7 +187,7 @@ export default {
         },
         // 保存数据
         async saveData() {
-            var that = this;
+            let that = this;
             // 提交数据
             await that.$api.Website.saveWebsite(that.formCustom).then(function (response) {
 
@@ -213,8 +205,8 @@ export default {
         },
         // 判断是否有按钮权限
         async checkIsAuthToButton(menu_auth_id) {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -225,6 +217,8 @@ export default {
                 }).catch(function (error) {
                     console.log(error);
                 });
+            }else{
+                that.saveData()
             }
         },
         // 重置

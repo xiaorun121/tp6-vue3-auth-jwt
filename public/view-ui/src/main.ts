@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ViewUIPlus from 'view-ui-plus'
 // import { Button, Table } from 'view-ui-plus'
-import locale from 'view-ui-plus/dist/locale/en-US';
+// import locale from 'view-ui-plus/dist/locale/en-US';
 
 import App from './App.vue'
 import router from './router'
@@ -30,10 +30,10 @@ const store = createStore({
       }
     },
     mutations: {
-      increment (state) {
+      increment (state: any) {
         state.menu
       },
-      menuListLeft (state,menuListLeftData){
+      menuListLeft (state: any,menuListLeftData: any){
         state.menu = menuListLeftData
       }
     }
@@ -53,6 +53,17 @@ app.use(router)
 
 app.use(store)
 
+app.use(ViewUIPlus, {
+  transfer: true,
+  size: 'large',
+  capture: false,
+  select: {
+      arrow: 'md-arrow-dropdown',
+      arrowSize: 20
+  },
+  // locale
+})
+
 
 // 全局组件 在vue界面中 <Index /> 使用
 app.component('Index',Index)
@@ -60,15 +71,6 @@ app.component('NoAuth',NoAuth)
 
 app.config.warnHandler = () => null
 
-app.use(ViewUIPlus, {
-    transfer: true,
-    size: 'large',
-    capture: false,
-    select: {
-        arrow: 'md-arrow-dropdown',
-        arrowSize: 20
-    },
-    locale
-})
+
 
 app.mount('#app')

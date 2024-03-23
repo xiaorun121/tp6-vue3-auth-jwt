@@ -261,13 +261,13 @@ export default {
     created() {
 
         // 获取是否是管理员权限
-        const isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
+        let isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
 
         if (isAdmin == true) {
             this.getProjectGather();
         } else {
             // 获取当前路由的参数menu_id 
-            const menu_id = this.$router.currentRoute._value.query.menu_id;
+            let menu_id = this.$router.currentRoute._value.query.menu_id;
             this.checkAuth(menu_id);
         }
 
@@ -275,8 +275,8 @@ export default {
     methods: {
         // 查询当前窗口是否有权限
         async checkAuth(menu_id) {
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
             await that.$api.Admin.checkAuth({ id: menu_id, user_id: userId }).then(function (response) {
                 if (response.data.code == 200) {
                     console.log(response.data.msg);
@@ -293,8 +293,8 @@ export default {
 
         // 获取日志数据
         async getProjectGather() {
-            const that = this;
-            const param = {
+            let that = this;
+            let param = {
                 time: that.time
             }
             await that.$api.ProjectGather.index(param).then(function (response) {
@@ -313,9 +313,9 @@ export default {
 
         // 点击查询
         clickSearch() {
-            const that = this;
+            let that = this;
 
-            const param = {
+            let param = {
                 time: that.time
             }
             that.queryProjectGather(param);
@@ -323,7 +323,7 @@ export default {
 
         // 根据查询条件查询数据
         async queryProjectGather(param) {
-            const that = this;
+            let that = this;
             that.$Message.loading('拼命加载中...');
             await that.$api.ProjectGather.index(param).then(function (response) {
                 if (response.data.code == 200) {
@@ -349,10 +349,10 @@ export default {
         },
         // 查看项目组数据列表信息
         async read(bProject, status) {
-            const that = this;
+            let that = this;
 
             that.$Message.loading('拼命加载中...');
-            const param = {
+            let param = {
                 b_project: bProject,
                 status: status
             }

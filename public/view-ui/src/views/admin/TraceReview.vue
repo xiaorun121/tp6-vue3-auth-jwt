@@ -931,22 +931,22 @@ export default {
 
 
         // 获取是否是管理员权限
-        const isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
+        let isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
         this.ISAdmin = isAdmin;
 
         // 获取用户id
-        const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+        let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
         this.uploadAction = "http://www.tp6.com/api/v1/uploadImage?user_id=" + user_id + "&menu_auth_id=170&id=";
 
         if (isAdmin == true) {
             this.getAppTrace();
         } else {
             // // 获取当前路由的参数menu_id 
-            const menu_id = this.$router.currentRoute._value.query.menu_id;
+            let menu_id = this.$router.currentRoute._value.query.menu_id;
             this.checkAuth(menu_id);
 
             // 判断是否有当前用户的规则数据  rules
-            const rules = sessionStorage.getItem('rules');
+            let rules = sessionStorage.getItem('rules');
             if (rules) {
                 this.rules = rules;
             } else {
@@ -967,7 +967,7 @@ export default {
                 return true;
             } else {
                 // 将 rules 字符串按逗号分隔为数组
-                const rulesArray = rules.split(',').map(item => parseInt(item.trim()));
+                let rulesArray = rules.split(',').map(item => parseInt(item.trim()));
 
                 // 检查 menu_id 是否包含在 rulesArray 中
                 return rulesArray.includes(parseInt(menu_id));
@@ -975,8 +975,8 @@ export default {
         },
         // 获取用户的规则数据rules
         async getUserToRules() {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             await that.$api.Admin.getUserToRules({ user_id: user_id }).then(function (response) {
                 if (response.data.code == 200) {
                     that.rules = response.data.data;
@@ -988,8 +988,8 @@ export default {
         },
         // 查询当前窗口是否有权限
         async checkAuth(menu_id) {
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
             await that.$api.Admin.checkAuth({ id: menu_id, user_id: userId }).then(function (response) {
                 if (response.data.code == 200) {
                     console.log(response.data.msg);
@@ -1013,10 +1013,10 @@ export default {
         },
         // 点击查询
         clickSearch() {
-            const that = this;
-            const queryModel = that.queryModel;
+            let that = this;
+            let queryModel = that.queryModel;
 
-            const param = {
+            let param = {
                 page: 1,
                 pageSize: 10,
                 api_vps: queryModel.api_vps ? queryModel.api_vps : '',
@@ -1034,7 +1034,7 @@ export default {
         },
         // 根据查询条件查询数据
         async queryAppTrace(param) {
-            const that = this;
+            let that = this;
             that.$Message.loading('拼命加载中...');
             await that.$api.AppTrace.index(param).then(function (response) {
                 if (response.data.code == 200) {
@@ -1075,9 +1075,9 @@ export default {
          */
         // 改变跳转开关状态
         changeJumpSwitch(id, jump_switch, menu_auth_id) {
-            const JumpSwitch = (jump_switch == true) ? false : true;
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let JumpSwitch = (jump_switch == true) ? false : true;
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1101,9 +1101,9 @@ export default {
         },
         // 改变热更新开关状态
         changeUpdateSwitch(id, update_switch, menu_auth_id) {
-            const UpdateSwitch = (update_switch == true) ? false : true;
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let UpdateSwitch = (update_switch == true) ? false : true;
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1126,9 +1126,9 @@ export default {
         },
         // 改变域名验证开关状态
         changeGoogleSharchStatus(id, google_sharch_status, menu_auth_id) {
-            const GoogleSharchStatus = (google_sharch_status == true) ? false : true;
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let GoogleSharchStatus = (google_sharch_status == true) ? false : true;
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1151,9 +1151,9 @@ export default {
         },
         // 改变HTTPS 启用状态
         changeHttpsStatus(id, https_status, menu_auth_id) {
-            const HttpsStatus = (https_status == true) ? false : true;
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let HttpsStatus = (https_status == true) ? false : true;
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1177,8 +1177,8 @@ export default {
         // 状态下拉选择
         onChangeStatus(id, status, menu_auth_id) {
 
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1203,8 +1203,8 @@ export default {
         },
         // 类型下拉选择
         onChangeAppType(id, appType, menu_auth_id) {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1228,8 +1228,8 @@ export default {
         },
         // 发布人员下拉选择
         onChangePublishId(id, publishId, menu_auth_id) {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             return new Promise((resolve) => {
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
@@ -1258,7 +1258,7 @@ export default {
 
         // 保存更新的资源文件
         async saveSwitchOrSelect(id, data, field) {
-            const that = this;
+            let that = this;
             await that.$api.AppTrace.update(id, { data: data, field: field }).then(function (response) {
                 if (response.data.code == 200) {
                     that.$Message.success(response.data.msg);
@@ -1279,9 +1279,9 @@ export default {
 
         // 获取App 跟踪数据
         async getAppTrace() {
-            const that = this;
-            const queryModel = that.queryModel;
-            const param = {
+            let that = this;
+            let queryModel = that.queryModel;
+            let param = {
                 page: that.page,
                 pageSize: that.pageSize,
                 api_vps: queryModel.api_vps ? queryModel.api_vps : '',
@@ -1332,9 +1332,9 @@ export default {
         // read Admin
         async saveAppTrace(id, menu_auth_id) {
 
-            const that = this;
+            let that = this;
 
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -1359,7 +1359,7 @@ export default {
         },
         // 根据id查询当前的数据信息
         async getAppTraceToId(id) {
-            const that = this;
+            let that = this;
             await that.$api.AppTrace.read(id).then(function (response) {
                 if (response.data.code == 200) {
                     that.formValidate = response.data.data;
@@ -1387,8 +1387,8 @@ export default {
         },
         // 提交数据
         async saveAppTraceData(formData) {
-            const that = this;
-            const formValidateID = that.formValidateID;
+            let that = this;
+            let formValidateID = that.formValidateID;
 
             await that.$api.AppTrace.update(formValidateID, formData).then(function (response) {
 
@@ -1418,7 +1418,7 @@ export default {
         },
         // 验证数据
         AsyncSaveAppTrace(name) {
-            const that = this;
+            let that = this;
             that.$refs[name].validate((valid) => {
                 if (valid) {
                     setTimeout(() => {
@@ -1443,8 +1443,8 @@ export default {
         // 点击删除数据
         async clickDelAppTrace(id, menu_auth_id) {
 
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -1527,10 +1527,10 @@ export default {
         // 移除图片
         async handleRemove(file, id, menu_auth_id) {
 
-            const name = file.name;
+            let name = file.name;
 
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -1555,7 +1555,7 @@ export default {
         },
         // 删除图片
         async delImage(name, id) {
-            const that = this;
+            let that = this;
             await that.$api.AppTrace.delImage({ name: name, id: id }).then(function (response) {
                 if (response.data.code != 200) {
                     console.log(response.data.msg)
@@ -1591,8 +1591,8 @@ export default {
         },
         // 点击一键复制
         async clickIsCopy(id, menu_auth_id) {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -1610,7 +1610,7 @@ export default {
         },
         // 一键复制
         async isCopy(id) {
-            const that = this;
+            let that = this;
             await that.$Modal.confirm({
                 title: 'isCopy',
                 content: 'Are you sure you want to isCopy it?',
@@ -1636,8 +1636,8 @@ export default {
         // 点击查看更新原因数据列表信息
         async clickRead(title, id, menu_auth_id) {
 
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -1656,7 +1656,7 @@ export default {
         },
         // 查看更新原因数据列表信息
         async read(title, id) {
-            const that = this;
+            let that = this;
 
             that.$Message.loading('拼命加载中...');
             await that.$api.AppTrace.readUpdateBatchToId(id).then(function (response) {

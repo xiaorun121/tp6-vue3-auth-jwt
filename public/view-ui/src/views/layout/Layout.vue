@@ -74,7 +74,7 @@
             <Sider ref="side1" :style="{ position: 'relative', height: '99vh', left: 0, overflow: 'auto' }" collapsible
                 v-model="isCollapsed">
                 <p style="margin-left: 15px">
-                    <Icon :type="adminIcon" class="ios-woman-outline" />{{userinfo.username}}
+                    <Icon :type="adminIcon" class="ios-woman-outline" />{{ userinfo.username }}
                 </p>
                 <Divider />
                 <Menu ref="menus" :active-name="activeName" theme="dark" width="auto" :open-names="openName"
@@ -117,7 +117,8 @@
                         </Poptip>
                     </Space>
                     <Modal v-model="modalUpdatePassword" title="update password" :loading="loading"
-                        @on-ok="asyncUpdatePassword('formUpdatePwd')" @on-cancel="cancelModel('formUpdatePwd')" draggable="true" sticky="true">
+                        @on-ok="asyncUpdatePassword('formUpdatePwd')" @on-cancel="cancelModel('formUpdatePwd')"
+                        draggable="true" sticky="true">
                         <Form ref="formUpdatePwd" :model="formUpdatePwd" :rules="ruleValidate" :label-width="180">
                             <FormItem label="Old Password" prop="old_password">
                                 <Input v-model="formUpdatePwd.old_password" placeholder="Enter Old Password..."></Input>
@@ -136,7 +137,7 @@
                 <Content :style="{ margin: '8px', background: '#fff', minHeight: '260px' }">
 
                     <Tabs type="card" ref="tabs" v-model="tabName" closable @on-tab-remove="handleTabRemove"
-                        @on-click="clickTab" >
+                        @on-click="clickTab">
 
                         <TabPane label="首页" name="#" closable="false">
                             <Index />
@@ -208,41 +209,39 @@ export default {
             },
             copyright: 'Copyright © 2022 View Design All Rights Reserved',
 
-            userinfo:{},
-            adminIcon:'ios-man-outline'
+            userinfo: {},
+            adminIcon: 'ios-man-outline'
         }
     },
     created() {
 
-        const token = sessionStorage.getItem('token');
-        if(token == null || token == ''){
+        let token = sessionStorage.getItem('token');
+        if (token == null || token == '') {
             this.$router.push('/login');
 
-            return ;
-        }
+        } else {
+            this.$router.push('/');
 
-        this.$router.push('/');
-        // sessionStorage.clear();
+            let userinfo = JSON.parse(sessionStorage.getItem('userinfo'));
+            if (userinfo) {
+                this.userinfo = userinfo;
+                if (userinfo.sex == '男') {
+                    this.adminIcon = "ios-man-outline";
+                } else {
+                    this.adminIcon = "ios-woman-outline";
+                }
+            }
 
-        const userinfo = JSON.parse(sessionStorage.getItem('userinfo'));
-        if(userinfo){
-            this.userinfo = userinfo;
-            if(userinfo.sex == '男'){
-                this.adminIcon = "ios-man-outline";
-            }else{
-                this.adminIcon = "ios-woman-outline";
+
+            // 获取菜单
+            let isMenu = sessionStorage.getItem('isMenu');
+            if (!isMenu) {
+                this.getMenus();
+            } else {
+                this.menuListLeft = JSON.parse(isMenu)
             }
         }
-        
 
-        // 获取菜单
-        const isMenu = sessionStorage.getItem('isMenu');
-        if(!isMenu){
-            this.getMenus();
-        }else{
-            this.menuListLeft = JSON.parse(isMenu)
-        }
-        
     },
     updated() {
 
@@ -250,7 +249,7 @@ export default {
 
             sessionStorage.removeItem('getData');
 
-            const sessionName = this.$route.name;
+            let sessionName = this.$route.name;
 
             sessionStorage.setItem('getData', JSON.stringify({ name: sessionName }));
         }
@@ -288,9 +287,9 @@ export default {
     methods: {
         // 获取菜单
         async getMenus() {
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
-            await this.$api.Menu.index({ is_menu: 1, user_id: userId}).then(function (response) {
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            await this.$api.Menu.index({ is_menu: 1, user_id: userId }).then(function (response) {
                 if (response.data.code == 200) {
                     that.menuListLeft = response.data.data.data_left;
                     sessionStorage.setItem('isMenu', JSON.stringify(response.data.data.data_left))
@@ -304,19 +303,19 @@ export default {
         selectMenu(menuName, cName, id) {
 
             // 定义跳转的链接，带上栏目的id 进行权限的判定
-            const sName = cName + '?menu_id=' + id;
+            let sName = cName + '?menu_id=' + id;
 
             // 判断菜单项是否存在于tabs
             if (sName in this.tabs) {
                 console.log('the tab is exist');
             } else {
-                
+
                 // tabs 当前cName 属性值为ture 时 才会显示
                 this.tabs[sName] = true;
 
                 // 将选择的菜单插入到tabsList中
                 this.tabsList.push({
-                    label: menuName, 
+                    label: menuName,
                     name: sName
                 });
             }
@@ -378,9 +377,16 @@ export default {
             if (this.collapsedSiderStatus == true) {
                 this.$refs.side1.toggleCollapse();
                 let submenu_icon = document.getElementsByClassName('ivu-menu-submenu-title-icon');
+                let menu = document.getElementsByClassName('menu');
                 for (let index = 0; index < submenu_icon.length; index++) {
 
-                    submenu_icon[index].style.display = "block";
+                    if (this.collapsedSiderStatus == true) {
+                        submenu_icon[index].style.display = "block";
+                        menu[index].style.display = "contents";
+                    } else {
+                        submenu_icon[index].style.display = "none";
+                        menu[index].style.display = "none";
+                    }
                 }
 
                 this.collapsedSiderStatus = (this.collapsedSiderStatus == true ? false : true);
@@ -461,7 +467,7 @@ export default {
             this.$Message.success('logout success!');
 
             setTimeout(() => {
-                
+
                 that.$router.push('/login')
 
             }, 1000);

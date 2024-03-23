@@ -36,7 +36,7 @@ const router = createRouter({
         {
           path: 'trace',
           name: 'trace',
-          component: () => import("../views/admin/trace.vue"),
+          component: () => import("../views/admin/Trace.vue"),
         },
         {
           path: 'logs',

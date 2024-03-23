@@ -183,15 +183,15 @@ export default {
     },
     created() {
         // 获取是否是管理员权限
-        const isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
+        let isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
         this.ISAdmin = isAdmin;
 
         if (isAdmin == true) {
 
-            const getData = sessionStorage.getItem('getData')
+            let getData = sessionStorage.getItem('getData')
 
             if (getData) {
-                const session_name = JSON.parse(getData).name;
+                let session_name = JSON.parse(getData).name;
                 if (session_name != 'menu') {
                     this.getMenu();
                 }
@@ -200,11 +200,11 @@ export default {
             }
         } else {
             // 获取当前路由的参数menu_id 
-            const menu_id = this.$router.currentRoute._value.query.menu_id;
+            let menu_id = this.$router.currentRoute._value.query.menu_id;
             this.checkAuth(menu_id);
 
             // 判断是否有当前用户的规则数据  rules
-            const rules = sessionStorage.getItem('rules');
+            let rules = sessionStorage.getItem('rules');
             if (rules) {
                 this.rules = rules;
             } else {
@@ -220,7 +220,7 @@ export default {
                 return true;
             } else {
                 // 将 rules 字符串按逗号分隔为数组
-                const rulesArray = rules.split(',').map(item => parseInt(item.trim()));
+                let rulesArray = rules.split(',').map(item => parseInt(item.trim()));
 
                 // 检查 menu_id 是否包含在 rulesArray 中
                 return rulesArray.includes(parseInt(menu_id));
@@ -228,8 +228,8 @@ export default {
         },
         // 获取用户的规则数据rules
         async getUserToRules() {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             await that.$api.Admin.getUserToRules({ user_id: user_id }).then(function (response) {
                 if (response.data.code == 200) {
                     that.rules = response.data.data;
@@ -242,8 +242,8 @@ export default {
 
         // 查询当前窗口是否有权限
         async checkAuth(menu_id) {
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
             await that.$api.Admin.checkAuth({ id: menu_id, user_id: userId }).then(function (response) {
                 if (response.data.code == 200) {
                     that.haveRule = true;
@@ -260,7 +260,7 @@ export default {
         async getMenu(is_menu = 0) {
             var that = this;
 
-            const menuData = JSON.parse(sessionStorage.getItem('menu'));
+            let menuData = JSON.parse(sessionStorage.getItem('menu'));
 
             if (menuData) {
 
@@ -270,7 +270,7 @@ export default {
                 sessionStorage.setItem('getData', JSON.stringify({ name: 'menu' }));
 
                 if (is_menu == 1) {
-                    const params = {
+                    let params = {
                         is_menu: is_menu,
                         user_id: JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
                     }
@@ -293,7 +293,7 @@ export default {
                         console.log(error)
                     });
                 } else {
-                    const params = {
+                    let params = {
                         is_menu: is_menu
                     }
 
@@ -384,8 +384,8 @@ export default {
 
             return new Promise((resolve) => {
                 // 判断是否有权限
-                const that = this;
-                const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+                let that = this;
+                let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
                 if (that.ISAdmin == false) {
                     that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                         if (response.data.code == 0) {
@@ -411,8 +411,8 @@ export default {
         },
         // 保存是否是菜单状态
         async changeSwitch(id, is_menu_status){
-            const is_menu = (is_menu_status === true ? false : true);
-            const that = this;
+            let is_menu = (is_menu_status === true ? false : true);
+            let that = this;
             await this.$api.Menu.update(id, { is_menu: is_menu }).then(function (response) {
 
                 if (response.data.code == 200) {
@@ -437,9 +437,9 @@ export default {
         // 添加菜单
         addMenu(menu_auth_id) {
 
-            const that = this;
-            const isTree = JSON.parse(sessionStorage.getItem('isTree'))
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let isTree = JSON.parse(sessionStorage.getItem('isTree'))
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -491,7 +491,7 @@ export default {
         // 编辑菜单
         async editMenu(id, menu_auth_id) {
             var that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -512,7 +512,7 @@ export default {
             var that = this;
             that.modalAddMenu = true;
             that.formValidate = {};
-            const isTree = JSON.parse(sessionStorage.getItem('isTree'))
+            let isTree = JSON.parse(sessionStorage.getItem('isTree'))
             if (isTree) {
                 that.ParentMenu = isTree
             } else {
@@ -538,7 +538,7 @@ export default {
         async delMenu(id, type, menu_auth_id) {
 
             var that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {

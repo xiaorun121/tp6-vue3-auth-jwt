@@ -134,18 +134,18 @@ export default {
     created() {
 
         // 获取是否是管理员权限
-        const isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
+        let isAdmin = JSON.parse(sessionStorage.getItem('userinfo'))['isAdmin'];
         this.ISAdmin = isAdmin;
 
         if(isAdmin == true){
             this.getBackend();
         }else{
             // // 获取当前路由的参数menu_id 
-            const menu_id = this.$router.currentRoute._value.query.menu_id;
+            let menu_id = this.$router.currentRoute._value.query.menu_id;
             this.checkAuth(menu_id);
 
             // 判断是否有当前用户的规则数据  rules
-            const rules = sessionStorage.getItem('rules');
+            let rules = sessionStorage.getItem('rules');
             if (rules) {
                 this.rules = rules;
             } else {
@@ -162,7 +162,7 @@ export default {
                 return true;
             } else {
                 // 将 rules 字符串按逗号分隔为数组
-                const rulesArray = rules.split(',').map(item => parseInt(item.trim()));
+                let rulesArray = rules.split(',').map(item => parseInt(item.trim()));
 
                 // 检查 menu_id 是否包含在 rulesArray 中
                 return rulesArray.includes(parseInt(menu_id));
@@ -170,8 +170,8 @@ export default {
         },
         // 获取用户的规则数据rules
         async getUserToRules() {
-            const that = this;
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let that = this;
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             await that.$api.Admin.getUserToRules({ user_id: user_id }).then(function (response) {
                 if (response.data.code == 200) {
                     that.rules = response.data.data;
@@ -183,8 +183,8 @@ export default {
         },
         // 查询当前窗口是否有权限
         async checkAuth(menu_id){
-            const that = this;
-            const userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
+            let that = this;
+            let userId = JSON.parse(sessionStorage.getItem('userinfo'))['user_id']
             await that.$api.Admin.checkAuth({id:menu_id,user_id:userId}).then(function(response) {
                 if(response.data.code == 200){
                     console.log(response.data.msg);
@@ -200,8 +200,8 @@ export default {
         },
         // 获取数据
         async getBackend() {
-            const that = this;
-            const param = {
+            let that = this;
+            let param = {
                 page:that.page,
                 pageSize:that.pageSize
             };
@@ -219,9 +219,9 @@ export default {
         },
         // add / read Backend
         async saveBackend(id, menu_auth_id) {
-            const that = this;
+            let that = this;
 
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -258,7 +258,7 @@ export default {
         },
         // 查询当前的数据信息
         async getBackendToId(id) {
-            const that = this;
+            let that = this;
             await that.$api.Backend.read(id).then(function (response) {
                 if (response.data.code == 200) {
                     that.formValidate = response.data.data;
@@ -272,9 +272,9 @@ export default {
         },
         // 点击删除
         async clickDelBackend(id, menu_auth_id) {
-            const that = this;
+            let that = this;
 
-            const user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
+            let user_id = JSON.parse(sessionStorage.getItem('userinfo'))['user_id'];
             if (that.ISAdmin == false) {
                 await that.$api.Admin.checkIsAuthToButton({ user_id: user_id, menu_auth_id: menu_auth_id }).then(function (response) {
                     if (response.data.code == 0) {
@@ -293,7 +293,7 @@ export default {
         },
         // 删除
         async delBackend(id) {
-            const that = this;
+            let that = this;
             await that.$Modal.confirm({
                 title: 'Del',
                 content: 'Are you sure you want to delete it?',
@@ -317,8 +317,8 @@ export default {
         },
         // 提交数据
         async saveBackendData(formData) {
-            const that = this;
-            const formValidateID = that.formValidateID;
+            let that = this;
+            let formValidateID = that.formValidateID;
             if (formValidateID > 0) {
                 // edit
                 await that.$api.Backend.update(formValidateID, formData).then(function (response) {
@@ -373,7 +373,7 @@ export default {
         },
         // 验证数据
         AsyncSaveBackend(name) {
-            const that = this;
+            let that = this;
             that.$refs[name].validate((valid) => {
                 if (valid) {
                     setTimeout(() => {

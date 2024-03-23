@@ -38,15 +38,15 @@
             },
             // 点击切换验证码
             handleGetCaptcha () {
-                const that = this;
-                const newSrc = 'http://www.tp6.com/api/v1/verify' + '?' + Math.random();
+                let that = this;
+                let newSrc = 'http://www.tp6.com/api/v1/verify' + '?' + Math.random();
 
                 // 更新验证码图片的 src 属性
                 that.captcha = newSrc;
             },
             // 提交数据
             async login(data){
-                const that = this;
+                let that = this;
                 await that.$api.Admin.login(data).then( function (response) {
                     if (response.data.code == 201) {
                         that.$Message.success(response.data.msg);
