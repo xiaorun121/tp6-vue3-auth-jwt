@@ -1,5 +1,5 @@
 <template>
-    <Exception type="404" img-color redirect="http://localhost:5173/"/>
+    <Exception type="404" img-color redirect="/"/>
 </template>
 <script>
     export default {
